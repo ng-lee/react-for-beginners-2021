@@ -8,108 +8,29 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
     const root = document.getElementById("root");
-    const MinutesToHours = () => {
-      const [amount, setAmount] = React.useState();
-      const [flipped, setFlipped] = React.useState(false);
-      const onChange = (event) => {
-        setAmount(event.target.value);
-      };
-      const reset = () => {
-        setAmount("");
-      };
-      const onFlip = () => {
-        reset();
-        setFlipped((current) => !flipped);
-      };
+    const Btn = ({ text, changeValue }) => {
       return (
-        <div>
-          <div>
-            <label htmlFor="minutes">Minutes</label>
-            <input
-              type="number"
-              id="minutes"
-              value={flipped ? amount * 60 : amount}
-              placeholder="Minutes"
-              onChange={onChange}
-              disabled={flipped}
-            />
-          </div>
-          <div>
-            <label htmlFor="hours">Hours</label>
-            <input
-              type="number"
-              id="hours"
-              value={flipped ? amount : amount / 60}
-              placeholder="Hours"
-              onChange={onChange}
-              disabled={!flipped}
-            />
-          </div>
-          <button onClick={reset}>Reset</button>
-          <button onClick={onFlip}>Flip</button>
-        </div>
+        <button
+          onClick={changeValue}
+          style={{
+            border: 0,
+            backgroundColor: "tomato",
+            padding: "10px",
+            color: "white",
+          }}
+        >
+          {text}
+        </button>
       );
     };
-    const KMToMiles = () => {
-      const [amount, setAmount] = React.useState();
-      const [flipped, setFlipped] = React.useState(false);
-      const onChange = (event) => {
-        setAmount(event.target.value);
-      };
-      const reset = () => {
-        setAmount("");
-      };
-      const onFlip = () => {
-        reset();
-        setFlipped((current) => !flipped);
-      };
-      return (
-        <div>
-          <div>
-            <label htmlFor="km">KM</label>
-            <input
-              type="number"
-              id="km"
-              value={flipped ? amount / 0.62137 : amount}
-              placeholder="KM"
-              onChange={onChange}
-              disabled={flipped}
-            />
-          </div>
-          <div>
-            <label htmlFor="miles">Miles</label>
-            <input
-              type="number"
-              id="miles"
-              value={flipped ? amount : amount * 0.62137}
-              placeholder="Miles"
-              onChange={onChange}
-              disabled={!flipped}
-            />
-          </div>
-          <button onClick={reset}>Reset</button>
-          <button onClick={onFlip}>Flip</button>
-        </div>
-      );
-    };
+    const MemorizedBtn = React.memo(Btn);
     const App = () => {
-      const [index, setIndex] = React.useState("-1");
-      const onSelect = (event) => {
-        setIndex(event.target.value);
-      };
+      const [value, setValue] = React.useState("Save Changes");
+      const changeValue = () => setValue("Revert Changes");
       return (
         <div>
-          <h1>Super Converter</h1>
-          <select value={index} onChange={onSelect}>
-            <option value="-1">Select Converter</option>
-            <option value="0">Minutes & Hours</option>
-            <option value="1">KM & Miles</option>
-          </select>
-          <div>
-            {index === "-1" ? "Make a choose!" : null}
-            {index === "0" ? <MinutesToHours /> : null}
-            {index === "1" ? <KMToMiles /> : null}
-          </div>
+          <MemorizedBtn text={value} changeValue={changeValue} />
+          <MemorizedBtn text="stop" />
         </div>
       );
     };
